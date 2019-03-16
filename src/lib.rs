@@ -26,6 +26,22 @@ impl<T: Copy + Clone> Vector2D<T> {
     }
 }
 
+impl<T, U, V> Vector2D<T>
+where
+    T: Mul<T, Output = U> + Copy + Clone,
+    U: Add<U, Output = V> + Copy + Clone,
+{
+    pub fn dot(v1: &Self, v2: &Self) -> V {
+        v1.x * v2.x + v1.y * v2.y
+    }
+
+    pub fn length_squared(&self) -> V {
+        self.x * self.x + self.y * self.y
+    }
+}
+
+// From Implementations
+
 impl<T, U> From<(U, U)> for Vector2D<T>
 where
     T: From<U>,
@@ -52,19 +68,7 @@ where
     }
 }
 
-impl<T, U, V> Vector2D<T>
-where
-    T: Mul<T, Output = U> + Copy + Clone,
-    U: Add<U, Output = V> + Copy + Clone,
-{
-    pub fn dot(v1: &Self, v2: &Self) -> V {
-        v1.x * v2.x + v1.y * v2.y
-    }
-
-    pub fn length_squared(&self) -> V {
-        self.x * self.x + self.y * self.y
-    }
-}
+// Specific Primitive Implementations
 
 impl Vector2D<f32> {
     pub fn length(&self) -> f32 {
@@ -104,6 +108,20 @@ impl Vector2D<f32> {
         Vector2D {
             x:  f32::max(0.0, self.x) as u64,
             y:  f32::max(0.0, self.y) as u64,
+        }
+    }
+
+    pub fn as_usizes(&self) -> Vector2D<usize> {
+        Vector2D {
+            x:  f32::max(0.0, self.x) as usize,
+            y:  f32::max(0.0, self.y) as usize,
+        }
+    }
+
+    pub fn as_isizes(&self) -> Vector2D<isize> {
+        Vector2D {
+            x: self.x as isize,
+            y: self.y as isize,
         }
     }
 }
@@ -155,6 +173,20 @@ impl Vector2D<f64> {
             y:  f64::max(0.0, self.y) as u64,
         }
     }
+
+    pub fn as_usizes(&self) -> Vector2D<usize> {
+        Vector2D {
+            x:  f64::max(0.0, self.x) as usize,
+            y:  f64::max(0.0, self.y) as usize,
+        }
+    }
+
+    pub fn as_isizes(&self) -> Vector2D<isize> {
+        Vector2D {
+            x: self.x as isize,
+            y: self.y as isize,
+        }
+    }
 }
 
 impl Vector2D<i32> {
@@ -183,6 +215,19 @@ impl Vector2D<i32> {
         Vector2D {
             x:  i32::max(0, self.x) as u64,
             y:  i32::max(0, self.y) as u64,
+        }
+    }
+
+    pub fn as_usizes(&self) -> Vector2D<usize> {
+        Vector2D {
+            x:  i32::max(0, self.x) as usize,
+            y:  i32::max(0, self.y) as usize,
+        }
+    }
+    pub fn as_isizes(&self) -> Vector2D<isize> {
+        Vector2D {
+            x: self.x as isize,
+            y: self.y as isize,
         }
     }
 }
@@ -222,6 +267,20 @@ impl Vector2D<i64> {
             y:  i64::max(0, self.y) as u64,
         }
     }
+
+    pub fn as_usizes(&self) -> Vector2D<usize> {
+        Vector2D {
+            x:  i64::max(0, self.x) as usize,
+            y:  i64::max(0, self.y) as usize,
+        }
+    }
+
+    pub fn as_isizes(&self) -> Vector2D<isize> {
+        Vector2D {
+            x: self.x as isize,
+            y: self.y as isize,
+        }
+    }
 }
 impl Vector2D<u32> {
     pub fn as_i32s(&self) -> Vector2D<i32> {
@@ -249,6 +308,20 @@ impl Vector2D<u32> {
         Vector2D {
             x: self.x as f64,
             y: self.y as f64,
+        }
+    }
+
+    pub fn as_usizes(&self) -> Vector2D<usize> {
+        Vector2D {
+            x:  self.x as usize,
+            y:  self.y as usize,
+        }
+    }
+
+    pub fn as_isizes(&self) -> Vector2D<isize> {
+        Vector2D {
+            x: self.x as isize,
+            y: self.y as isize,
         }
     }
 }
@@ -281,7 +354,125 @@ impl Vector2D<u64> {
             y:  self.y as u32,
         }
     }
+
+    pub fn as_usizes(&self) -> Vector2D<usize> {
+        Vector2D {
+            x:  self.x as usize,
+            y:  self.y as usize,
+        }
+    }
+
+    pub fn as_isizes(&self) -> Vector2D<isize> {
+        Vector2D {
+            x: self.x as isize,
+            y: self.y as isize,
+        }
+    }
 }
+
+impl Vector2D<usize> {
+    pub fn as_i32s(&self) -> Vector2D<i32> {
+        Vector2D {
+            x: self.x as i32,
+            y: self.y as i32,
+        }
+    }
+
+    pub fn as_i64s(&self) -> Vector2D<i64> {
+        Vector2D {
+            x: self.x as i64,
+            y: self.y as i64,
+        }
+    }
+
+    pub fn as_f32s(&self) -> Vector2D<f32> {
+        Vector2D {
+            x: self.x as f32,
+            y: self.y as f32,
+        }
+    }
+
+    pub fn as_f64s(&self) -> Vector2D<f64> {
+        Vector2D {
+            x: self.x as f64,
+            y: self.y as f64,
+        }
+    }
+
+    pub fn as_u32s(&self) -> Vector2D<u32> {
+        Vector2D {
+            x:  self.x as u32,
+            y:  self.y as u32,
+        }
+    }
+
+    pub fn as_u64s(&self) -> Vector2D<u64> {
+        Vector2D {
+            x:  self.x as u64,
+            y:  self.y as u64,
+        }
+    }
+
+    pub fn as_isizes(&self) -> Vector2D<isize> {
+        Vector2D {
+            x: self.x as isize,
+            y: self.y as isize,
+        }
+    }
+}
+
+impl Vector2D<isize> {
+    pub fn as_i32s(&self) -> Vector2D<i32> {
+        Vector2D {
+            x: self.x as i32,
+            y: self.y as i32,
+        }
+    }
+
+    pub fn as_i64s(&self) -> Vector2D<i64> {
+        Vector2D {
+            x: self.x as i64,
+            y: self.y as i64,
+        }
+    }
+
+    pub fn as_f32s(&self) -> Vector2D<f32> {
+        Vector2D {
+            x: self.x as f32,
+            y: self.y as f32,
+        }
+    }
+
+    pub fn as_f64s(&self) -> Vector2D<f64> {
+        Vector2D {
+            x: self.x as f64,
+            y: self.y as f64,
+        }
+    }
+
+    pub fn as_u32s(&self) -> Vector2D<u32> {
+        Vector2D {
+            x:  self.x as u32,
+            y:  self.y as u32,
+        }
+    }
+
+    pub fn as_u64s(&self) -> Vector2D<u64> {
+        Vector2D {
+            x:  self.x as u64,
+            y:  self.y as u64,
+        }
+    }
+
+    pub fn as_usizes(&self) -> Vector2D<usize> {
+        Vector2D {
+            x: self.x as usize,
+            y: self.y as usize,
+        }
+    }
+}
+
+// Ops Implementations
 
 impl<T, O> Add<Vector2D<T>> for Vector2D<T>
 where
