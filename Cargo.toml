@@ -10,9 +10,6 @@ readme = "README.md"
 license = "Unlicense"
 keywords = ["vectors"]
 
-[badges]
-gitlab = { repository = "https://gitlab.com/DixieDev/vec2d-rs" }
-
 [dependencies]
 proc_vector2d = { path = "proc_vector2d", version = "1.0.1" }
 

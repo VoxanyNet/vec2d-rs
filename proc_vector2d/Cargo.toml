@@ -8,9 +8,6 @@ edition = "2018"
 repository = "https://gitlab.com/DixieDev/vec2d-rs"
 license = "Unlicense"
 
-[badges]
-gitlab = { repository = "https://gitlab.com/DixieDev/vec2d-rs" }
-
 [lib]
 proc-macro = true
 
