@@ -11,5 +11,5 @@ license = "Unlicense"
 keywords = ["vectors"]
 
 [dependencies]
-proc_vector2d = { path = "proc_vector2d", version = "1.0.1" }
+proc_vector2d = { path = "proc_vector2d", version = "1.0.2" }
 
