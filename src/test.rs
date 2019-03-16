@@ -5,7 +5,7 @@ fn dot() {
     let v1 = Vector2D::new(10.0, 5.0);
     let v2 = Vector2D::new(1.5, 2.0);
 
-    let result = Vector2D::dot(&v1, &v2);
+    let result = Vector2D::dot(v1, v2);
 
     assert_eq!(25.0, result);
 }

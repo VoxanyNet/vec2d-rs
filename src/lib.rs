@@ -93,7 +93,7 @@ impl<T: Copy + Clone> Vector2D<T> {
     /// let f64_vector: Vector2D<f64> = i32_vector.into_vec2d();
     /// assert_eq!(Vector2D::new(25.0, 8.0), f64_vector);
     /// ```
-    pub fn into_vec2d<U: From<T>>(&self) -> Vector2D<U> {
+    pub fn into_vec2d<U: From<T>>(self) -> Vector2D<U> {
         Vector2D {
             x: self.x.into(),
             y: self.y.into(),
@@ -107,14 +107,14 @@ where
     U: Add<U, Output = V> + Copy + Clone,
 {
     /// Get the scalar/dot product of the two `Vector2D`.
-    pub fn dot(v1: &Self, v2: &Self) -> V {
+    pub fn dot(v1: Self, v2: Self) -> V {
         v1.x * v2.x + v1.y * v2.y
     }
 
     /// Get the squared length of a `Vector2D`. This is more performant than using 
     /// `length()` -- which is only available for `Vector2D<f32>` and `Vector2D<f64>`
     /// -- as it does not perform any square root operation.
-    pub fn length_squared(&self) -> V {
+    pub fn length_squared(self) -> V {
         self.x * self.x + self.y * self.y
     }
 }
@@ -152,18 +152,18 @@ where
 impl Vector2D<f32> {
     /// Get the length of the vector. If possible, favour `length_squared()` over
     /// this function, as it is more performant.
-    pub fn length(&self) -> f32 {
+    pub fn length(self) -> f32 {
         f32::sqrt(self.length_squared())
     }
 
     /// Get a new vector with the same direction as this vector, but with a length
     /// of 1.0.
-    pub fn normalise(&self) -> Self {
+    pub fn normalise(self) -> Self {
         self / self.length()
     }
 
     /// Get the vector's direction in radians.
-    pub fn angle(&self) -> f32 {
+    pub fn angle(self) -> f32 {
         self.y.atan2(self.x)
     }
 
@@ -178,18 +178,18 @@ impl Vector2D<f32> {
 impl Vector2D<f64> {
     /// Get the length of the vector. If possible, favour `length_squared()` over
     /// this function, as it is more performant.
-    pub fn length(&self) -> f64 {
+    pub fn length(self) -> f64 {
         f64::sqrt(self.length_squared())
     }
 
     /// Get a new vector with the same direction as this vector, but with a length
     /// of 1.0.
-    pub fn normalise(&self) -> Self {
+    pub fn normalise(self) -> Self {
         self / self.length()
     }
 
     /// Get the vector's direction in radians.
-    pub fn angle(&self) -> f64 {
+    pub fn angle(self) -> f64 {
         self.y.atan2(self.x)
     }
 
