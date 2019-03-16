@@ -1,6 +1,6 @@
 [package]
 name = "vector2d"
-description = "The spoon of 2D vector libraries, intended for simple game development without any external dependencies"
+description = "The spoon of 2D vector libraries, intended for simple game development"
 version = "1.1.2"
 authors = ["Anthony <anthony@anthony-arian.com>"]
 edition = "2018"
