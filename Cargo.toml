@@ -7,7 +7,7 @@ edition = "2018"
 
 repository = "https://gitlab.com/DixieDev/vec2d-rs"
 readme = "README.md"
-license = "Unlicence"
+license = "Unlicense"
 keywords = ["vectors"]
 
 [badges]

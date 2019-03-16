@@ -6,7 +6,7 @@ authors = ["AnthonyYoManz <anthony@anthony-arian.com>"]
 edition = "2018"
 
 repository = "https://gitlab.com/DixieDev/vec2d-rs"
-license = "Unlicence"
+license = "Unlicense"
 
 [badges]
 gitlab = { repository = "https://gitlab.com/DixieDev/vec2d-rs" }
