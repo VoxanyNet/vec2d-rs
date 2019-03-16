@@ -1,8 +1,18 @@
 [package]
 name = "vector2d"
+description = "The spoon of 2D vector libraries, intended for simple game development without any external dependencies"
 version = "1.1.2"
 authors = ["Anthony <anthony@anthony-arian.com>"]
 edition = "2018"
 
+repository = "https://gitlab.com/DixieDev/vec2d-rs"
+readme = "README.md"
+license = "Unlicence"
+keywords = ["vectors"]
+
+[badges]
+gitlab = { repository = "https://gitlab.com/DixieDev/vec2d-rs" }
+
 [dependencies]
-proc_vec2d = { path = "proc_vec2d" }
+proc_vec2d = { path = "proc_vec2d", version = "1.0.0" }
+
