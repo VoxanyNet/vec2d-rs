@@ -3,7 +3,7 @@ A simple and convenient 2D vector type without any external dependencies. If oth
 
 ## Using vector2d
 You probably don't need any documentation to get by with the `Vector2D` type; functions like `dot`, `length`, and `angle` are hopefully all named intuitively enough for you all to get by. If you find yourself stuck, or worry you might be missing out on some convenient features, then look no further than the snippet below!
-```Rust
+```rust
 use vector2d::Vector2D;
 
 fn main() {
