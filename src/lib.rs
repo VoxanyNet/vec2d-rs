@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod test;
 
-use proc_vec2d::{fn_lower_bounded_as, fn_simple_as};
+use proc_vector2d::{fn_lower_bounded_as, fn_simple_as};
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]

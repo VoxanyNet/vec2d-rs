@@ -14,5 +14,5 @@ keywords = ["vectors"]
 gitlab = { repository = "https://gitlab.com/DixieDev/vec2d-rs" }
 
 [dependencies]
-proc_vec2d = { path = "proc_vec2d", version = "1.0.0" }
+proc_vector2d = { path = "proc_vector2d", version = "1.0.1" }
 
