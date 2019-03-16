@@ -208,7 +208,7 @@ fn readme_snippet() {
     // For types with a Add and Mul implementation, the functions dot() and length_squared() are
     // available. For access to length(), normalise(), or angle() however, you must be using either
     // Vector2D<f32> or Vector2D<f64>.
-    let v1_len_sq = v1.length_squared();
+    let _v1_len_sq = v1.length_squared();
     let v2_len = v2.length();
     let v2_dir = v2.normalise();
 
