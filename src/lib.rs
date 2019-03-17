@@ -1,27 +1,27 @@
 //! # vector2d
-//! A simple and convenient 2D vector library without excessive use of external 
+//! A simple and convenient 2D vector library without excessive use of external
 //! dependencies. If other vector crates are swiss-army knives, vector2d is a
-//! spoon; safe, intuitive, and convenient. As an added bonus, you won't run 
-//! into any excursions with the law using this library thanks to the awfully 
+//! spoon; safe, intuitive, and convenient. As an added bonus, you won't run
+//! into any excursions with the law using this library thanks to the awfully
 //! permissive Unlicense.
-//! 
+//!
 //! The only type in this crate is [`Vector2D`], which is highly generic;
-//! shifting functionality depending upon the traits implemented by its internal 
+//! shifting functionality depending upon the traits implemented by its internal
 //! components' types.
-//! 
+//!
 //! [`Vector2D`]: struct.Vector2D.html
-//! 
+//!
 //! # Example
 //! ```
 //! use vector2d::Vector2D;
-//! 
+//!
 //! fn main() {
 //!     // Vectors have fields X and Y, these can be of any type
 //!     let v1: Vector2D<i32> = Vector2D { x: 10, y: 5 };
-//! 
+//!
 //!     // Alternatively you can use new(..) to condense instantiation
 //!     let v2: Vector2D<f64> = Vector2D::new(13.0, 11.5);
-//! 
+//!
 //!     // There are two ways to cast between Vector2Ds, depending on the source
 //!     // and target types.
 //!     //
@@ -29,40 +29,40 @@
 //!     // can either use source.into_vec2d() or Vector2D::from_vec2d(source).
 //!     assert_eq!(Vector2D::new(10.0, 5.0), v1.into_vec2d());
 //!     assert_eq!(Vector2D::new(10.0, 5.0), Vector2D::from_vec2d(v1));
-//! 
+//!
 //!     // If there is no From or Into implementation, then you're out of luck
-//!     // unless you are using specific primitives, such as i32 and f64. In 
+//!     // unless you are using specific primitives, such as i32 and f64. In
 //!     // this case you can use specialised functions, as shown below:
 //!     assert_eq!(Vector2D::new(13, 11), v2.as_i32s());
-//! 
+//!
 //!     // The full list of interoperable primitives is as follows:
 //!     //   - i32, i64, isize
 //!     //   - u32, u64, usize
 //!     //   - f32, f64
-//! 
-//!     // As primitives generally implement From/Into for lossless casts, 
-//!     // an as_Ts() function is not available for those types, and 
+//!
+//!     // As primitives generally implement From/Into for lossless casts,
+//!     // an as_Ts() function is not available for those types, and
 //!     // from(..)/into() should be favoured.
 //!     //
-//!     // Casts between signed and unsigned primitives will perform bounds 
+//!     // Casts between signed and unsigned primitives will perform bounds
 //!     // checking, so casting the vector (-10.0, 2.0) to a Vector2D<u32> will
 //!     // result in the vector (0, 2).
-//! 
+//!
 //!     // For types with an Add and Mul implementation, the functions dot() and
 //!     // length_squared() are available. For access to length(), normalise(),
-//!     // or angle() however, you must be using either Vector2D<f32> or 
+//!     // or angle() however, you must be using either Vector2D<f32> or
 //!     // Vector2D<f64>.
 //!     let _v1_len_sq = v1.length_squared();
 //!     let v2_len = v2.length();
 //!     let v2_dir = v2.normalise();
-//! 
+//!
 //!     // Assuming the operator traits are implemented for the types involved,
-//!     // you can add and subtract Vector2Ds from one-another, as well as 
+//!     // you can add and subtract Vector2Ds from one-another, as well as
 //!     // multiply and divide them with scalar values.
 //!     assert_eq!(v2, v2_dir * v2_len);
 //!     assert_eq!(Vector2D::new(23.0, 16.5),  v2 + v1.into_vec2d()) ;
-//! 
-//!     // Finally, for any Vector2D<T>, there is an implementation of 
+//!
+//!     // Finally, for any Vector2D<T>, there is an implementation of
 //!     // From<(T, T)> and From<[T; 2]>
 //!     let v4: Vector2D<f64> = Vector2D::new(1.5, 2.3);
 //!     assert_eq!(v4, (1.5, 2.3).into());
@@ -70,7 +70,6 @@
 //! }
 //! ```
 
- 
 #[cfg(test)]
 mod test;
 
@@ -78,21 +77,21 @@ use proc_vector2d::{fn_lower_bounded_as, fn_simple_as};
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
 
 /// A 2D vector, containing an `x` and a `y` component. While many types can be
-/// used for a `Vector2D`'s components, the traits they implement determine 
+/// used for a `Vector2D`'s components, the traits they implement determine
 /// what functions are available.
-/// 
-/// Provided that the components implement the necessary traits, `Vector2D`s 
+///
+/// Provided that the components implement the necessary traits, `Vector2D`s
 /// can be added to or subtracted from one-another, and they can be mulitplied
 /// and divided by scalar values.
-/// 
+///
 /// There are generally two options for converting between `Vector2D` types. If
 /// the internal components' type has an implementation of `Into` that targets
 /// the desired type, then [`into_vec2d()`] can be called from the source object,
 /// or [`from_vec2d(..)`] can be called and the source object can be provided.
-/// 
+///
 /// If no `Into` implementation exists, then the only option is to use one of the
-/// flavours of casting with `as`. These are in the form `as_types()`, and are only 
-/// implemented for specific types of components. An example usage would look like 
+/// flavours of casting with `as`. These are in the form `as_types()`, and are only
+/// implemented for specific types of components. An example usage would look like
 /// this:
 /// ```
 /// use vector2d::Vector2D;
@@ -100,29 +99,29 @@ use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
 /// let i32_vector: Vector2D<i32> = f64_vector.as_i32s();
 /// assert_eq!(Vector2D::new(10, 11), i32_vector);
 /// ```
-/// 
-/// Implementations of `as_types()` are only available when an implementation of 
+///
+/// Implementations of `as_types()` are only available when an implementation of
 /// [`into_vec2d()`] is unavailable. This is to seperate between the lossless casting
 /// of primitives with `into()` and `from(..)`, and the lossy casting between
-/// primitives of varying detail. 
-/// 
-/// Casts from signed types to unsigned types have a small additional check that 
+/// primitives of varying detail.
+///
+/// Casts from signed types to unsigned types have a small additional check that
 /// ensures a lower bound of 0 on the signed value, to reduce the chances of
-/// experiencing undefined behaviour. This means that a `Vector2D<f64>` with a 
+/// experiencing undefined behaviour. This means that a `Vector2D<f64>` with a
 /// value of `(-10.3, 11.1)` would become `(0, 11)` when cast to a `Vector2D<u32>`
 /// with [`as_u32s()`].
-/// 
+///
 /// The current list of interoperable types that can be cast with the `as` family of
 /// functions is as follows:
 ///   - `i32`
-///   - `i64`, 
+///   - `i64`,
 ///   - `isize`
 ///   - `u32`
 ///   - `u64`
 ///   - `usize`
 ///   - `f32`
 ///   - `f64`
-/// 
+///
 /// [`into_vec2d()`]: struct.Vector2D.html#method.into_vec2d
 /// [`from_vec2d(..)`]: struct.Vector2D.html#method.from_vec2d
 /// [`as_u32s()`]: struct.Vector2D.html#method.as_u32s-1
@@ -140,7 +139,7 @@ impl<T: Copy + Clone> Vector2D<T> {
 
     /// Convert a `Vector2` of type `U` to one of type `T`. Available only when
     /// type T has implemented `From<U>`.
-    /// 
+    ///
     /// # Example
     /// ```
     /// use vector2d::Vector2D;
@@ -157,7 +156,7 @@ impl<T: Copy + Clone> Vector2D<T> {
 
     /// Convert a `Vector2` of type `T` to one of type `U`. Available only when
     /// type T has implemented `Into<U>`.
-    /// 
+    ///
     /// # Example
     /// ```
     /// use vector2d::Vector2D;
@@ -184,11 +183,21 @@ where
         v1.x * v2.x + v1.y * v2.y
     }
 
-    /// Get the squared length of a `Vector2D`. This is more performant than using 
+    /// Get the squared length of a `Vector2D`. This is more performant than using
     /// `length()` -- which is only available for `Vector2D<f32>` and `Vector2D<f64>`
     /// -- as it does not perform any square root operation.
     pub fn length_squared(self) -> V {
         self.x * self.x + self.y * self.y
+    }
+}
+
+impl<T> Vector2D<T>
+where
+    T: Sub<T, Output = T> + Mul<T, Output = T> + Add<T, Output = T> + Copy + Clone,
+{
+    /// Linearly interpolates between two vectors
+    pub fn lerp(start: Self, end: Self, progress: T) -> Self {
+        start + ((end - start) * progress)
     }
 }
 
@@ -231,25 +240,20 @@ impl Vector2D<f32> {
 
     /// Get a new vector with the same direction as this vector, but with a length
     /// of 1.0. If the the length of the vector is 0, then the original vector is
-	/// returned.
+    /// returned.
     pub fn normalise(self) -> Self {
-	    let len = self.length();
-		if len == 0.0 {
-			self
-		} else {
+        let len = self.length();
+        if len == 0.0 {
+            self
+        } else {
             self / len
-		}
+        }
     }
 
     /// Get the vector's direction in radians.
     pub fn angle(self) -> f32 {
         self.y.atan2(self.x)
     }
-
-	/// Linearly interpolates between two vectors
-	pub fn lerp_f32(start: Self, end: Self, progress: f32) -> Self {
-		start + ((end - start) * progress)
-	}
 
     fn_simple_as!(i32);
     fn_simple_as!(i64);
@@ -268,25 +272,20 @@ impl Vector2D<f64> {
 
     /// Get a new vector with the same direction as this vector, but with a length
     /// of 1.0. If the the length of the vector is 0, then the original vector is
-	/// returned.
+    /// returned.
     pub fn normalise(self) -> Self {
-	    let len = self.length();
-		if len == 0.0 {
-			self
-		} else {
+        let len = self.length();
+        if len == 0.0 {
+            self
+        } else {
             self / len
-		}
+        }
     }
 
     /// Get the vector's direction in radians.
     pub fn angle(self) -> f64 {
         self.y.atan2(self.x)
     }
-
-	/// Linearly interpolates between two vectors
-	pub fn lerp_f64(start: Self, end: Self, progress: f64) -> Self {
-		start + ((end - start) * progress)
-	}
 
     fn_simple_as!(i32);
     fn_simple_as!(i64);
