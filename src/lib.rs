@@ -230,7 +230,8 @@ impl Vector2D<f32> {
     }
 
     /// Get a new vector with the same direction as this vector, but with a length
-    /// of 1.0.
+    /// of 1.0. If the the length of the vector is 0, then the original vector is
+	/// returned.
     pub fn normalise(self) -> Self {
 	    let len = self.length();
 		if len == 0.0 {
@@ -244,6 +245,11 @@ impl Vector2D<f32> {
     pub fn angle(self) -> f32 {
         self.y.atan2(self.x)
     }
+
+	/// Linearly interpolates between two vectors
+	pub fn lerp_f32(start: Self, end: Self, progress: f32) -> Self {
+		start + ((end - start) * progress)
+	}
 
     fn_simple_as!(i32);
     fn_simple_as!(i64);
@@ -261,7 +267,8 @@ impl Vector2D<f64> {
     }
 
     /// Get a new vector with the same direction as this vector, but with a length
-    /// of 1.0.
+    /// of 1.0. If the the length of the vector is 0, then the original vector is
+	/// returned.
     pub fn normalise(self) -> Self {
 	    let len = self.length();
 		if len == 0.0 {
@@ -275,6 +282,11 @@ impl Vector2D<f64> {
     pub fn angle(self) -> f64 {
         self.y.atan2(self.x)
     }
+
+	/// Linearly interpolates between two vectors
+	pub fn lerp_f64(start: Self, end: Self, progress: f64) -> Self {
+		start + ((end - start) * progress)
+	}
 
     fn_simple_as!(i32);
     fn_simple_as!(i64);

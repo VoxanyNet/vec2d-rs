@@ -172,3 +172,13 @@ fn f32_as_u32_bounded() {
     let uv = fv.as_u32s();
     assert_eq!(Vector2D::new(0, 0), uv);
 }
+
+#[test]
+fn lerp() {
+	let start = Vector2D::new(5.0, 10.0);
+	let end = Vector2D::new(10.0, 11.5);
+	
+	let result = Vector2D::lerp_f64(start, end, 0.5);
+
+	assert_eq!(Vector2D::new(7.5, 10.75), result);
+}
