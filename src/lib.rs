@@ -232,7 +232,12 @@ impl Vector2D<f32> {
     /// Get a new vector with the same direction as this vector, but with a length
     /// of 1.0.
     pub fn normalise(self) -> Self {
-        self / self.length()
+	    let len = self.length();
+		if len == 0.0 {
+			self
+		} else {
+            self / len
+		}
     }
 
     /// Get the vector's direction in radians.
@@ -258,7 +263,12 @@ impl Vector2D<f64> {
     /// Get a new vector with the same direction as this vector, but with a length
     /// of 1.0.
     pub fn normalise(self) -> Self {
-        self / self.length()
+	    let len = self.length();
+		if len == 0.0 {
+			self
+		} else {
+            self / len
+		}
     }
 
     /// Get the vector's direction in radians.
