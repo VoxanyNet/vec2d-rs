@@ -182,3 +182,9 @@ fn lerp() {
 
     assert_eq!(Vector2D::new(7.5, 10.75), result);
 }
+
+#[test]
+fn neg() {
+    let v = Vector2D::new(10.3, -5.4);
+    assert_eq!(Vector2D::new(-10.3, 5.4), -v);
+}
