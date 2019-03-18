@@ -74,7 +74,7 @@
 mod test;
 
 use proc_vector2d::{fn_lower_bounded_as, fn_simple_as};
-use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
+use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign};
 
 /// A 2D vector, containing an `x` and a `y` component. While many types can be
 /// used for a `Vector2D`'s components, the traits they implement determine
@@ -169,6 +169,70 @@ impl<T: Copy + Clone> Vector2D<T> {
         Vector2D {
             x: self.x.into(),
             y: self.y.into(),
+        }
+    }
+}
+
+impl<T: Default> Vector2D<T> {
+    /// Returns a vector with only the horizontal component of the current one
+    /// 
+    /// # Example
+    /// ```
+    /// use vector2d::Vector2D;
+    /// let v = Vector2D::new(10, 20);
+    /// assert_eq!(Vector2D::new(10, 0), v.horizontal());
+    /// ```
+    pub fn horizontal(self) -> Self {
+        Self {
+            x: self.x,
+            y: Default::default(),
+        }
+    }
+
+    /// Returns a vector with only the vertical component of the current one
+    /// 
+    /// # Example
+    /// ```
+    /// use vector2d::Vector2D;
+    /// let v = Vector2D::new(10, 20);
+    /// assert_eq!(Vector2D::new(0, 20), v.vertical());
+    pub fn vertical(self) -> Self {
+        Self {
+            x: Default::default(),
+            y: self.y,
+        }
+    }
+}
+
+impl<T, U> Neg for Vector2D<T>
+where
+    T: Neg<Output = U> + Copy + Clone,
+{
+    type Output = Vector2D<U>;
+    fn neg(self) -> Self::Output {
+        Self::Output {
+            x: -self.x,
+            y: -self.y,
+        }
+    }
+}
+
+impl<T> Vector2D<T>
+where
+    T: Neg<Output = T> + Copy + Clone,
+{
+    /// Returns a vector perpendicular to the current one.
+    /// 
+    /// # Example
+    /// ```
+    /// use vector2d::Vector2D;
+    /// let v = Vector2D::new(21.3, -98.1);
+    /// assert_eq!(Vector2D::new(98.1, 21.3), v.normal());
+    /// ```
+    pub fn normal(self) -> Self {
+        Self {
+            x: -self.y,
+            y: self.x,
         }
     }
 }
