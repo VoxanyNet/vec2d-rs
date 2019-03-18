@@ -62,11 +62,31 @@
 //!     assert_eq!(v2, v2_dir * v2_len);
 //!     assert_eq!(Vector2D::new(23.0, 16.5),  v2 + v1.into_vec2d()) ;
 //!
-//!     // Finally, for any Vector2D<T>, there is an implementation of
+//!     // If you feel the need to multiply or divide individual components of
+//!     // vectors with the same type, you can use mul_components(...) or
+//!     // div_components(...) provided that their types can be multiplied or
+//!     // divided.
+//!
+//!     // For any Vector2D<T>, there is an implementation of
 //!     // From<(T, T)> and From<[T; 2]>
 //!     let v4: Vector2D<f64> = Vector2D::new(1.5, 2.3);
 //!     assert_eq!(v4, (1.5, 2.3).into());
 //!     assert_eq!(v4, [1.5, 2.3].into());
+//!
+//!     // Additionally, there is an Into<(T, T)> implementation for any types
+//!     // that the vector components have their own Into implementations for
+//!     assert_eq!((1.5, 2.3), v4.into());
+//!
+//!     // If you want the normal of a vector you can just call normal()
+//!     let v5 = Vector2D::new(-10.0, -2.3);
+//!     assert_eq!(Vector2D::new(2.3, -10.0), v5.normal());
+//!
+//!     // You can get a vector consisting of only the horizontal or vertical
+//!     // component of a vector by calling horizontal() or vertical()
+//!     // respectively
+//!     let v6 = Vector2D::new(12.3, 83.2);
+//!     assert_eq!(Vector2D::new(12.3, 0.0), v6.horizontal());
+//!     assert_eq!(Vector2D::new(0.0, 83.2), v6.vertical());
 //! }
 //! ```
 
@@ -175,7 +195,7 @@ impl<T: Copy + Clone> Vector2D<T> {
 
 impl<T: Default> Vector2D<T> {
     /// Returns a vector with only the horizontal component of the current one
-    /// 
+    ///
     /// # Example
     /// ```
     /// use vector2d::Vector2D;
@@ -190,7 +210,7 @@ impl<T: Default> Vector2D<T> {
     }
 
     /// Returns a vector with only the vertical component of the current one
-    /// 
+    ///
     /// # Example
     /// ```
     /// use vector2d::Vector2D;
@@ -200,6 +220,50 @@ impl<T: Default> Vector2D<T> {
         Self {
             x: Default::default(),
             y: self.y,
+        }
+    }
+}
+
+impl<T> Vector2D<T>
+where
+    T: Mul<T, Output = T> + Copy + Clone,
+{
+    /// Returns a new vector with components equal to each of the current vector's
+    /// components multiplied by the corresponding component of the provided vector
+    ///
+    /// # Example
+    /// ```
+    /// use vector2d::Vector2D;
+    /// let v1 = Vector2D::new(11.0, -2.5);
+    /// let v2 = Vector2D::new(0.5, -2.0);
+    /// assert_eq!(Vector2D::new(5.5, 5.0), v1.mul_components(v2));
+    /// ```
+    pub fn mul_components(self, other: Self) -> Self {
+        Self {
+            x: self.x * other.x,
+            y: self.y * other.y,
+        }
+    }
+}
+
+impl<T> Vector2D<T>
+where
+    T: Div<T, Output = T> + Copy + Clone,
+{
+    /// Returns a new vector with components equal to each of the current vector's
+    /// components divided by the corresponding component of the provided vector
+    ///
+    /// # Example
+    /// ```
+    /// use vector2d::Vector2D;
+    /// let v1 = Vector2D::new(11.0, -2.5);
+    /// let v2 = Vector2D::new(0.5, -2.0);
+    /// assert_eq!(Vector2D::new(22.0, 1.25), v1.div_components(v2));
+    /// ```
+    pub fn div_components(self, other: Self) -> Self {
+        Self {
+            x: self.x / other.x,
+            y: self.y / other.y,
         }
     }
 }
@@ -222,7 +286,7 @@ where
     T: Neg<Output = T> + Copy + Clone,
 {
     /// Returns a vector perpendicular to the current one.
-    /// 
+    ///
     /// # Example
     /// ```
     /// use vector2d::Vector2D;
@@ -265,7 +329,16 @@ where
     }
 }
 
-// From Implementations
+// From/Into Implementations
+
+impl<T, U> Into<(U, U)> for Vector2D<T>
+where
+    T: Into<U> + Copy + Clone,
+{
+    fn into(self) -> (U, U) {
+        (self.x.into(), self.y.into())
+    }
+}
 
 impl<T, U> From<(U, U)> for Vector2D<T>
 where
@@ -511,7 +584,7 @@ where
 {
     type Output = Vector2D<O>;
     fn mul(self, rhs: T) -> Self::Output {
-        Vector2D {
+        Self::Output {
             x: self.x * rhs,
             y: self.y * rhs,
         }
@@ -534,7 +607,7 @@ where
 {
     type Output = Vector2D<O>;
     fn div(self, rhs: T) -> Self::Output {
-        Vector2D {
+        Self::Output {
             x: self.x / rhs,
             y: self.y / rhs,
         }
@@ -547,7 +620,7 @@ where
 {
     type Output = Vector2D<O>;
     fn div(self, rhs: T) -> Self::Output {
-        Vector2D {
+        Self::Output {
             x: self.x / rhs,
             y: self.y / rhs,
         }
